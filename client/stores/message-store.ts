@@ -20,13 +20,13 @@ export function setUsername(username: string): void {
   chosenUsername = username;
 }
 
-export async function sendMessage(message: Message): Promise<void> {
+export async function sendMessage(message: string): Promise<void> {
   const response = await fetch("http://127.0.0.1:8000/message", {
     method: "POST",
     body: new URLSearchParams({
-      room: message.room,
-      username: message.username,
-      message: message.message,
+      room: chosenRoom,
+      username: chosenUsername,
+      message: message,
     }),
   });
 

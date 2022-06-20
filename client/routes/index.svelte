@@ -13,7 +13,7 @@
     <div class="flex flex-col h-full">
       <MessageList />
       <div class="justify-end">
-        <MessageInput headerColor="bg-yellow-300" />
+        <MessageInput />
       </div>
     </div>
   </div>
