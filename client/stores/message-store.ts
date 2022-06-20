@@ -7,6 +7,19 @@ export interface Message {
   message: string;
 }
 
+export let chosenRoom = "";
+export let chosenUsername = "";
+export const messageStore = writable<Message[]>();
+
+export function setRoom(room: string) {
+  chosenRoom = room;
+  subscribeToRoom(room);
+}
+
+export function setUsername(username: string): void {
+  chosenUsername = username;
+}
+
 export async function sendMessage(message: Message): Promise<void> {
   const response = await fetch("http://127.0.0.1:8000/message", {
     method: "POST",
@@ -22,9 +35,12 @@ export async function sendMessage(message: Message): Promise<void> {
   }
 }
 
-export const messageStore = writable<Message[]>();
+export async function subscribeToRoom(room: string) {
+  // Empty the message list
+  messageStore.update(() => {
+    return [];
+  });
 
-export async function subscribeToChannel(room: string) {
   const uri = `http://127.0.0.1:8000/events`;
   var retryTime = 1;
 
@@ -62,7 +78,7 @@ export async function subscribeToChannel(room: string) {
       let timeout = retryTime;
       retryTime = Math.min(64, retryTime * 2);
       console.log(`connection lost. attempting to reconnect in ${timeout}s`);
-      setTimeout(() => subscribeToChannel(uri), (() => timeout * 1000)());
+      setTimeout(() => subscribeToRoom(uri), (() => timeout * 1000)());
     };
   }
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import MessageInput from "../components/text-fields/messageInput.svelte";
-  import MessageList from "../components/text-fields/messageList.svelte";
+  import MessageInput from "../components/messageInput.svelte";
+  import MessageList from "../components/messageList.svelte";
 </script>
 
 <svelte:head>
