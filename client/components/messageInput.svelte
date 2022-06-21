@@ -22,7 +22,7 @@
             border-4 border-black drop-shadow-block 
             bg-white"
 >
-  <Header />
+  <Header bind:message />
 
   <div class="w-auto h-auto">
     <input
