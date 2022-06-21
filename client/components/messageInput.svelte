@@ -13,6 +13,7 @@
   function send() {
     sendMessage(message);
     console.log(message);
+    message = "";
   }
 </script>
 

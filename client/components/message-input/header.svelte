@@ -1,6 +1,15 @@
 <script lang="ts">
+  import { sendMessage } from "../..//stores/message-store";
   import Room from "./room.svelte";
   import Username from "./username.svelte";
+
+  export let message = "";
+
+  function send() {
+    sendMessage(message);
+    console.log(message);
+    message = "";
+  }
 </script>
 
 <div
@@ -15,13 +24,13 @@
         <div class="flex flex-row">
           <Room />
           <Username />
-          />
         </div>
       </div>
     </div>
     <div class="grow" />
     <div class="flex-none">
       <button
+        on:click={send}
         class="mx-2 mt-2 w-16
               border-4 border-black drop-shadow-block
               bg-yellow-300 hover:bg-white"
