@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-  <title>Frikk Herding</title>
+  <title>Chat App</title>
 </svelte:head>
 
 <div class="min-w-full min-h-screen bg-emerald-600">
