@@ -21,7 +21,9 @@ export function setUsername(username: string): void {
 }
 
 export async function sendMessage(message: string): Promise<void> {
-  const response = await fetch("http://127.0.0.1:8000/message", {
+  const uri = "https://chat-app-2x7ycovpza-ew.a.run.app/message";
+  //const uri = "http://127.0.0.1:8000/message";
+  const response = await fetch(uri, {
     method: "POST",
     body: new URLSearchParams({
       room: chosenRoom,
@@ -36,12 +38,14 @@ export async function sendMessage(message: string): Promise<void> {
 }
 
 export async function subscribeToRoom(room: string) {
+  const uri = `https://chat-app-2x7ycovpza-ew.a.run.app/events`;
+  //const uri = `http://127.0.0.1:8000/events`;
+
   // Empty the message list
   messageStore.update(() => {
     return [];
   });
 
-  const uri = `http://127.0.0.1:8000/events`;
   var retryTime = 1;
 
   if (browser) {
@@ -49,7 +53,7 @@ export async function subscribeToRoom(room: string) {
 
     // Subscribe to messages
     events.onmessage = (event) => {
-      console.log("Event received");
+      console.log("Event received: ");
       console.log(JSON.stringify(event.data));
       const message = JSON.parse(event.data) as Message;
       if (message.room == room) {
@@ -57,8 +61,6 @@ export async function subscribeToRoom(room: string) {
           if (!messages) {
             messages = [];
           }
-          console.log(messages);
-          console.log(message);
           messages.push(message);
           return messages;
         });
