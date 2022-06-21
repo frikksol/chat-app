@@ -1,11 +1,8 @@
 #[macro_use] extern crate rocket;
 
-#[cfg(test)] mod tests;
-
 use rocket::http::Header;
 use rocket::{Request, Response};
 use rocket::fairing::{Fairing, Info, Kind};use rocket::{State, Shutdown};
-use rocket::fs::{relative, FileServer};
 use rocket::form::Form;
 use rocket::response::stream::{EventStream, Event};
 use rocket::serde::{Serialize, Deserialize};
@@ -77,5 +74,4 @@ fn rocket() -> _ {
         .manage(channel::<Message>(1024).0)
         .attach(CORS)
         .mount("/", routes![post, events])
-        //.mount("/", FileServer::from(relative!("build"))) // TODO Verify if I can host the app from rocket or if I need addition hosting
 }
