@@ -8,10 +8,8 @@
     setRoom(room);
   });
 
-  function keyDownRoom(event: any) {
-    if (event.key === "Enter") {
-      setRoom(room);
-    }
+  function onChange() {
+    setRoom(room);
   }
 </script>
 
@@ -19,6 +17,6 @@
 <input
   type="text"
   bind:value={room}
-  on:keydown={keyDownRoom}
+  on:change={onChange}
   class="w-32 p-4 rounded-none bg-yellow-200 h-12 mt-2 text-center"
 />

@@ -21,7 +21,7 @@
     <div class="flex-none">
       <div class="flex flex-col">
         <h1 class="font-sans font-semibold text-lg">New Message</h1>
-        <div class="flex flex-row">
+        <div class="flex xl:flex-row flex-col">
           <Room />
           <Username />
         </div>
