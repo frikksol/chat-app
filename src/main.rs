@@ -1,49 +1,25 @@
-#[macro_use] extern crate rocket;
+mod db;
+mod schema;
+mod models;
+mod routes;
 
+#[macro_use]
+extern crate diesel;
+
+#[macro_use]
+extern crate rocket;
+
+use rocket::fairing::{Fairing, Kind, Info};
 use rocket::http::Header;
 use rocket::{Request, Response};
-use rocket::fairing::{Fairing, Info, Kind};use rocket::{State, Shutdown};
-use rocket::form::Form;
-use rocket::response::stream::{EventStream, Event};
-use rocket::serde::{Serialize, Deserialize};
-use rocket::tokio::sync::broadcast::{channel, Sender, error::RecvError};
-use rocket::tokio::select;
+use rocket::tokio::sync::broadcast::{channel};
 
-#[derive(Debug, Clone, FromForm, Serialize, Deserialize)]
-#[cfg_attr(test, derive(PartialEq, UriDisplayQuery))]
-#[serde(crate = "rocket::serde")]
+use crate::models::{Message};
+use crate::routes::message_routes::*;
+use crate::routes::event_routes::*;
 
-struct Message {
-    #[field(validate = len(..30))]
-    pub room: String,
-    #[field(validate = len(..20))]
-    pub username: String,
-    pub message: String,
-}
-
-/// Returns an infinite stream of server-sent events. Each event is a message
-/// pulled from a broadcast queue sent by the `post` handler.
-#[get("/events")]
-async fn events(queue: &State<Sender<Message>>, mut end: Shutdown) -> EventStream![] {
-    let mut rx = queue.subscribe();
-    EventStream! {
-        loop {
-            let msg = select! {
-                msg = rx.recv() => match msg {
-                    Ok(msg) => msg,
-                    Err(RecvError::Closed) => break,
-                    Err(RecvError::Lagged(_)) => continue,
-                },
-                _ = &mut end => break,
-            };
-
-            yield Event::json(&msg);
-        }
-    }
-}
 
 pub struct CORS;
-
 #[rocket::async_trait]
 impl Fairing for CORS {
     fn info(&self) -> Info {
@@ -61,17 +37,17 @@ impl Fairing for CORS {
     }
 }
 
-/// Receive a message from a form submission and broadcast it to any receivers.
-#[post("/message", data = "<form>")]
-fn post(form: Form<Message>, queue: &State<Sender<Message>>) {
-    // A send 'fails' if there are no active subscribers. That's okay.
-    let _res = queue.send(form.into_inner());
-}
-
 #[launch]
 fn rocket() -> _ {
     rocket::build()
         .manage(channel::<Message>(1024).0)
+        //.attach(Db::fairing())
         .attach(CORS)
-        .mount("/", routes![post, events])
+        .mount("/events", routes![realtime_events])
+        .mount("/messages", routes![
+            get_messages_for_room,
+            get_all_messages,
+            create_message
+        ]
+    )
 }

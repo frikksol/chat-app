@@ -5,7 +5,11 @@ edition = "2021"
 publish = false
 
 [dependencies]
-rocket = { version = "0.5.0-rc.1", features = ["json"] }
+diesel = {version = "2.0.0", features = ["postgres", "chrono"]}
+rocket = { version = "0.5.0-rc.2", features = ["json"] }
+serde = "1.0.140"
+chrono = "^0"
+dotenv = "0.15.0"
 
 [dev-dependencies]
 rand = "0.8"
