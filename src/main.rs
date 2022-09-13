@@ -37,12 +37,19 @@ impl Fairing for CORS {
     }
 }
 
+#[get("/")]
+pub async fn hello() -> String {
+    println!("We do nothing here");
+    return String::from("Hello world!");
+}
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()
         .manage(channel::<Message>(1024).0)
         //.attach(Db::fairing())
         .attach(CORS)
+        .mount("/", routes![hello])
         .mount("/events", routes![realtime_events])
         .mount("/messages", routes![
             get_messages_for_room,
