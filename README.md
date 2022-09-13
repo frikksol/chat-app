@@ -1,41 +1,79 @@
 # Realtime chat app with rust and rocket backend
-This realtime chat app is personal test project to test out rust and rocket.
-The backend runs on CloudRun, while the frontend is hosted on vercel.
-
-The backend is written in rust, using rocket for building the API, while
-the frontend is written in typescript using SvelteKit and Tailwind CSS
+This realtime chat app is personal test project to test out Rust, Rocket, Diesel and Postgres.
 
 Huge thanks to Sergio Benitez for making [this](https://github.com/SergioBenitez/Rocket/tree/v0.5-rc/examples/chat) repo,
-laying the groundwork for this project, and Luke Pighetti for making [this](https://github.com/lukepighetti/rust_faas_challenge) repo, that made deploying on CloudRun a breeze.
+laying the groundwork for this project
 
-## Running in development
-### Backend
+## Backend
+The backend is written in rust, using rocket for building the API. It is hosted on Render 
+as they have good support for rust and they have hosted Postgres.
+
+In addition Diesel is used as ORM for the database.
+
+## Frontend
+The frontend is written in typescript using SvelteKit and Tailwind CSS. It is hosted on vercel.
+
+# Running in development
+You need to install Rust, Postgres, Node and Diesel locally before beginning.
+
+## Database
+You need to migrate the Postgres server to get up and running, by running the following command. 
+This sets up all tables etc.
+```bash
+diesel migration run
+```
+
+You also need the find out the local url for your Postgres database, and create a .env file in the root
+of you project and add the following in that file:
+```
+DATABASE_URL=<your-database-url>
+```
+
+## Backend
 To run the development backend, run the following command:
 ```bash
 cargo run
 ```
+However I recommend installing cargo-watch, ad that gives hot reloading whenever you save a file
+```bash
+cargo install cargo-watch
+```
+And the you can run cargo in watch-mode
+```bash
+cargo watch -x run
+```
 
-### Frontend
-To run the development frontend, first switch to using the development URI's in `message-store.svelte`, then run
+## Frontend
+To run the development frontend run
 ```bash
 npm run dev
 ```
 
-## Running in production
-### Backend
-To run it on CloudRun, you need to update the `deploy.sh` file with your config. Swap the email address with yours, and swap out my project name `chat-app-353012` with yours. Then run the command:
-```bash
-chmod +x deploy.sh # If you haven't already
-./deploy.sh
-```
+# Running in production
+## Database
+- Go to render.com
+- Create a user
+- Create a new Postgres instance
+- Copy the internal url, to use in the next step
+- Done!
+## Backend
+Hosting on Render is super easy: 
+- Push your fork of the repo to github
+- Go to render.com
+- Create a user
+- Create a new WebServer
+- Add the internal postgres URL as an environment variable called DATABASE_URL
+- Connect the new project to your repo
+- Use all standard settings
+- Go time!
 
 PS: The production backend is not yet built for production, so its probably less performant than it could be.
 
-### Frontend
+## Frontend
 Hosting on Vercel is super easy: 
 - Push your fork of the repo to github
 - Go to vercel.com
 - Create a user
 - Create a new project
 - Connect the new project to your repo
-- Give it a couple of minutes, then your live
+- Give it a couple of minutes, then you are live
