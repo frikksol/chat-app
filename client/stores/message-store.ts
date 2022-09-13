@@ -1,5 +1,6 @@
 import { browser } from "$app/env";
 import { writable } from "svelte/store";
+import { Env } from "../lib/env";
 
 export interface Message {
   room: string;
@@ -21,11 +22,10 @@ export function setUsername(username: string): void {
 }
 
 export async function sendMessage(message: string): Promise<void> {
-  const uri = "https://chat-app-2x7ycovpza-ew.a.run.app/message";
-  //const uri = "http://127.0.0.1:8000/message";
+  const uri = `${Env.getApiBaseUri()}/messages`;
   const response = await fetch(uri, {
     method: "POST",
-    body: new URLSearchParams({
+    body: JSON.stringify({
       room: chosenRoom,
       username: chosenUsername,
       message: message,
@@ -34,16 +34,18 @@ export async function sendMessage(message: string): Promise<void> {
 
   if (response.ok) {
     console.log("success");
+  } else {
+    console.log(response.statusText);
   }
 }
 
 export async function subscribeToRoom(room: string) {
-  const uri = `https://chat-app-2x7ycovpza-ew.a.run.app/events`;
-  //const uri = `http://127.0.0.1:8000/events`;
+  const uri = `${Env.getApiBaseUri()}/events`;
 
-  // Empty the message list
+  // Reset the message list
+  const existingMessagesForRoom = await getExistingMessagesForRoom(room);
   messageStore.update(() => {
-    return [];
+    return existingMessagesForRoom;
   });
 
   var retryTime = 1;
@@ -82,5 +84,21 @@ export async function subscribeToRoom(room: string) {
       console.log(`connection lost. attempting to reconnect in ${timeout}s`);
       setTimeout(() => subscribeToRoom(uri), (() => timeout * 1000)());
     };
+  }
+
+  async function getExistingMessagesForRoom(
+    roomName: string
+  ): Promise<Message[]> {
+    Env.getApiBaseUri();
+    const uri = `${Env.getApiBaseUri()}/messages/${roomName}`;
+    const response = await fetch(uri);
+
+    if (response.ok) {
+      const result = await response.json();
+      return result as Message[];
+    } else {
+      console.log(response.statusText);
+      return [];
+    }
   }
 }
