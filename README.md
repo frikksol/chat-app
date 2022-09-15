@@ -29,6 +29,12 @@ of you project and add the following in that file:
 DATABASE_URL=<your-database-url>
 ```
 
+## Database
+The local Postgres database runs in a docker container and can be started with the command
+``` bash
+docker compose up
+```
+
 ## Backend
 To run the development backend, run the following command:
 ```bash

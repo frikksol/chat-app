@@ -8,9 +8,10 @@ export interface Message {
   message: string;
 }
 
-export let chosenRoom = "";
-export let chosenUsername = "";
 export const messageStore = writable<Message[]>();
+
+let chosenRoom = "";
+let chosenUsername = "";
 
 export function setRoom(room: string) {
   chosenRoom = room;
@@ -19,6 +20,10 @@ export function setRoom(room: string) {
 
 export function setUsername(username: string): void {
   chosenUsername = username;
+}
+
+export function getUsername(): string {
+  return chosenUsername;
 }
 
 export async function sendMessage(message: string): Promise<void> {

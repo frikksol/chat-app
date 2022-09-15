@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { setUsername } from "../../stores/message-store";
+  import { setUsername } from "../stores/message-store";
 
   let username: string = "user";
 
@@ -18,5 +18,5 @@
   type="text"
   bind:value={username}
   on:change={onChange}
-  class="w-32 p-4 rounded-none bg-yellow-200 h-12 mt-2 text-center"
+  class="w-32 p-4 rounded-none bg-emerald-600 h-12 mt-2 text-center"
 />

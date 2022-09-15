@@ -12,17 +12,11 @@
   });
 </script>
 
-<div class="w-auto h-auto my-12">
-  {#if $messageStore}
-    <ul>
-      {#each $messageStore as message}
-        <li>
-          <MessageField headerColor="bg-blue-300" {message} />
-        </li>
-      {/each}
-    </ul>
-  {:else}
-    Loading
-  {/if}
+<div class="w-auto h-auto mt-10">
+  {#each $messageStore as message}
+    <li>
+      <MessageField {message} />
+    </li>
+  {/each}
 </div>
 <div id="scroll-to" />
