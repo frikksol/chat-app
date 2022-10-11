@@ -8,6 +8,8 @@
     <h1 class="text-xl mt-10 font-bold">Loading chats</h1>
     <p class="mt-6">
       The first time using the app, this can take a couple of minutes
+      <br /><br />
+      This is due to using free docker hosting that takes a while to spin up
     </p>
   </div>
 </nav>
