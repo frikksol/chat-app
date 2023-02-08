@@ -16,7 +16,7 @@ The frontend is written in typescript using SvelteKit and Tailwind CSS. It is ho
 # Running in development
 You need to install Rust, Postgres, Node and Diesel locally before beginning.
 
-## Database
+## Database initial setup
 You need to migrate the Postgres server to get up and running, by running the following command. 
 This sets up all tables etc.
 ```bash
@@ -29,7 +29,7 @@ of you project and add the following in that file:
 DATABASE_URL=<your-database-url>
 ```
 
-## Database
+## Starting the database
 The local Postgres database runs in a docker container and can be started with the command
 ``` bash
 docker compose up
@@ -52,6 +52,7 @@ cargo watch -x run
 ## Frontend
 To run the development frontend run
 ```bash
+cd client
 npm run dev
 ```
 
@@ -60,6 +61,8 @@ npm run dev
 - Go to render.com
 - Create a user
 - Create a new Postgres instance
+- Copy the external url to use in the next step
+- In your repo run `diesel migration run --database-url <external-url>`
 - Copy the internal url, to use in the next step
 - Done!
 ## Backend
