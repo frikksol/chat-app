@@ -1,4 +1,4 @@
-import { dev } from "$app/env";
+import { dev } from "$app/environment";
 
 export class Env {
   public static getApiBaseUri(): string {
